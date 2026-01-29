@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Homepage View -->
+    <record id="view_homepage" model="ir.ui.view">
+        <field name="name">website.homepage</field>
+        <field name="model">website.page</field>
+        <field name="arch" type="xml">
+            <template id="homepage_template" name="Homepage">
+                <t t-call="website.layout">
+                    <div class="container">
+                        <h1>Welcome to Our Gym Management System</h1>
+                        <p>Manage your gym efficiently with our comprehensive tools.</p>
+                        <a href="/gym/accounts" class="btn btn-primary">View Gym Accounts</a>
+                    </div>
+                </t>
+            </template>
+        </field>
+    </record>
+</odoo>

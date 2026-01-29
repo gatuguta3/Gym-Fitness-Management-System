@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    
+    <record id="view_gym_activity_form" model="ir.ui.view">
+        <field name="name">gym.activity.form</field>
+        <field name="model">gym.activity</field>
+        <field name="arch" type="xml">
+            <form string="Gym Activity">
+                <header>
+                    <button name="action_share_whatsapp" string="Message Trainer" class="oe_highlight"
+                            data-hotkey="w" icon="fa-whatsapp"
+                            type="object"/>
+
+                    <field name="state" widget="statusbar" nolabel="1" options="{'clickable': '1'}"
+                        statusbar_visible="draft,progress,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Choose"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="trainer_id"/>
+                            <field name="duration"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="start_time"/>
+                            <field name="end_time"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Attending Members">
+                            <field name="member_id">
+                                <tree string="Members" create="1" edit="1" delete="0">
+                                    <field name="name" required="1"/>
+                                    <field name="phone"/>                                    
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_gym_activity_tree" model="ir.ui.view">
+        <field name="name">gym.activity.tree</field>
+        <field name="model">gym.activity</field>
+        <field name="arch" type="xml">
+            <tree string="Gym Activities">
+                <field name="name"/>
+                <field name="trainer_id"/>
+                <field name="duration"/>
+                <field name="date"/>
+                <field name="start_time"/>
+                <field name="end_time"/>
+                <field name="state"
+                        decoration-success="state == 'done'" decoration-info="state in ('draft', 'progress')" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_gym_activity_calendar" model="ir.ui.view">
+        <field name="name">gym.activity.calendar</field>
+        <field name="model">gym.activity</field>
+        <field name="arch" type="xml">
+            <calendar string="Gym Activities"
+                      date_start="start_time"
+                      date_stop="end_time">
+                <field name="name"/>
+                <field name="trainer_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="action_gym_activity" model="ir.actions.act_window">
+        <field name="name">Gym Activities</field>
+        <field name="res_model">gym.activity</field>
+        <field name="view_mode">calendar,tree,form</field>
+    </record>
+
+    <menuitem id="menu_gym_activities" name="Activities" parent="menu_gym_root" action="action_gym_activity"/>
+</odoo>

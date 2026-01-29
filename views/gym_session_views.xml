@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+      <record id="view_gym_session_form" model="ir.ui.view">
+        <field name="name">gym.session.form</field>
+        <field name="model">gym.session</field>
+        <field name="arch" type="xml">
+            <form string="Gym Session">
+                <header>
+                    <field name="session_status" widget="statusbar" nolabel="1" 
+                        statusbar_visible="active,closed" options="{'clickable': '1'}"/>
+                    <!-- Remove any buttons from header to avoid duplication -->
+                      <button name="action_close_session" type="object" string="Close Session" 
+                        class="oe_highlight" invisible="session_status == 'closed'"/>
+                </header>
+                <sheet>
+                  
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Session Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="session_id" readonly="1"/>
+                            <field name="session_date"/>
+                            <field name="start_time"/>
+                        </group>
+                        <group>
+                            <field name="close_time"/>
+                            <field name="members_count" string="Total Members" readonly="1"/>
+                            <field name="active_members_count" string="Checked In" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Attending Members">
+                            <field name="attendance_ids">
+                                <tree string="Members" create="1" edit="1" delete="0">
+                                    <field name="member_id" required="1"/>
+                                    <field name="check_in"/>
+                                    <field name="check_out"/>
+                                    <field name="status" widget="badge"/>
+                                    <button name="action_check_out" type="object" string="Check Out" 
+                                            class="oe_highlight" invisible="status == 'checked_out'"/>
+                                    <button name="action_check_in" type="object" string="Check In" 
+                                            class="bg-success" invisible="status == 'checked_in'"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                 
+                
+            </form>
+        </field>
+    </record>
+
+
+
+
+    <record id="view_gym_session_tree" model="ir.ui.view">
+        <field name="name">gym.session.tree</field>
+        <field name="model">gym.session</field>
+        <field name="arch" type="xml">
+            <tree string="Gym Sessions">
+                <field name="session_id"/>
+                <field name="name"/>
+                <field name="session_date"/>
+                <field name="start_time"/>
+                <field name="members_count"/>
+                <field name="active_members_count"/>
+                <field name="session_status" 
+                       decoration-success="session_status == 'closed'" 
+                       decoration-warning="session_status == 'active'" 
+                       widget="badge"/>
+                <button name="action_close_session" type="object" string="Close Session" 
+                        class="oe_highlight" invisible="session_status == 'closed'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_gym_session_kanban" model="ir.ui.view">
+        <field name="name">gym.session.kanban</field>
+        <field name="model">gym.session</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_example">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="o_kanban_record">
+                            <div class="oe_kanban_content">
+                                <strong><field name="session_id"/> - <field name="name"/></strong>
+                                <div>Date: <field name="session_date"/></div>
+                                <div>Start: <field name="start_time"/></div>
+                                <div>Members: <field name="members_count"/></div>
+                                <div>Active: <field name="active_members_count"/></div>
+                                <div>Status: <field name="session_status"/></div>
+                                <button name="action_close_session" type="object" string="Close Session" 
+                                        class="oe_highlight" invisible="session_status == 'closed'"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_gym_session" model="ir.actions.act_window">
+        <field name="name">Gym Sessions</field>
+        <field name="res_model">gym.session</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+         
+   <menuitem id="menu_gym_sessions" name="Sessions" parent="menu_gym_root" action="action_gym_session" /> 
+    
+
+</odoo>

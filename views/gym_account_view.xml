@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_gym_account_form" model="ir.ui.view">
+        <field name="name">gym.account.form</field>
+        <field name="model">gym.account</field>
+        <field name="arch" type="xml">
+            <form string="Gym Account">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Account Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="acc_no"/>
+                        <field name="account_type"/>
+                        <field name="balance"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_gym_account_tree" model="ir.ui.view">
+        <field name="name">gym.account.tree</field>
+        <field name="model">gym.account</field>
+        <field name="arch" type="xml">
+            <tree string="Gym Accounts">
+                <field name="name"/>
+                <field name="acc_no"/>
+                <field name="account_type"/>
+                <field name="balance"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_gym_account_search" model="ir.ui.view">
+        <field name="name">gym.account.search</field>
+        <field name="model">gym.account</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="account_type"/>
+                <filter string="Assets" name="asset_accounts" domain="[('account_type','=','asset')]"/>
+                <filter string="Liabilities" name="liability_accounts" domain="[('account_type','=','liability')]"/>
+                <filter string="Income" name="income_accounts" domain="[('account_type','=','income')]"/>
+                <filter string="Expenses" name="expense_accounts" domain="[('account_type','=','expense')]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_gym_account" model="ir.actions.act_window">
+        <field name="name">Gym Accounts</field>
+        <field name="res_model">gym.account</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first gym account!
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_gym_account" name="Accounts" parent="menu_gym_root" action="action_gym_account"/>
+</odoo>

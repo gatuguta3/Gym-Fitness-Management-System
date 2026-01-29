@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_gym_attendance_tree" model="ir.ui.view">
+        <field name="name">gym.attendance.tree</field>
+        <field name="model">gym.attendance</field>
+        <field name="arch" type="xml">
+            <tree string="All Attendances" create="0" edit="0" delete="0">
+                <field name="session_id"/>
+                <field name="member_id"/>
+                <field name="check_in"/>
+                <field name="check_out"/>
+                <field name="status" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_gym_attendance" model="ir.actions.act_window">
+        <field name="name">Attendance History</field>
+        <field name="res_model">gym.attendance</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="menu_gym_attendances" name="Attendance History" parent="menu_gym_root" action="action_gym_attendance" sequence="30"/>
+</odoo>

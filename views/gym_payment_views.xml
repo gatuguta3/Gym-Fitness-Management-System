@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="gym_payment_form_view" model="ir.ui.view">
+            <field name="name">gym.payment.form</field>
+            <field name="model">gym.payment</field>
+            <field name="arch" type="xml">
+                <form string="Gym Payment">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="member_id"/>
+                            <h1>
+                                <field name="member_id" placeholder="Member"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="membership_id"/>
+                                <field name="payment_method"/>
+                            </group>
+                            <group>
+                                <field name="amount"/>
+                                <field name="payment_date"/>
+                                <field name="status"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="gym_payment_tree_view" model="ir.ui.view">
+            <field name="name">gym.payment.tree</field>
+            <field name="model">gym.payment</field>
+            <field name="arch" type="xml">
+                <tree string="Gym Payments">
+                    <field name="member_id"/>
+                    <field name="membership_id"/>
+                    <field name="amount"/>
+                    <field name="payment_date"/>
+                    <field name="payment_method"
+                           decoration-success="payment_method in ('cash', 'credit_card', 'bank_transfer', 'crypto')" widget="badge"/>
+                    <field name="status"
+                           decoration-success="status == 'paid'" decoration-info="status in ('pending', 'overdue')" widget="badge"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="gym_payment_graph_view" model="ir.ui.view">
+            <field name="name">gym.payment.graph</field>
+            <field name="model">gym.payment</field>
+            <field name="arch" type="xml">
+                <graph string="Gym Payment">
+                    <field name="member_id"/>
+                    <field name="membership_id" type="Membership"/>
+                    <field name="amount"/>
+                    <field name="payment_date"/>
+                    <field name="payment_method"/>
+                    <field name="status"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="gym_payment_pivot_view" model="ir.ui.view">
+            <field name="name">gym.payment.pivot</field>
+            <field name="model">gym.payment</field>
+            <field name="arch" type="xml">
+                <pivot string="Gym Payment">
+                    <field name="member_id" type="row"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_gym_payment_kanban" model="ir.ui.view">
+            <field name="name">gym.payment.kanban</field>
+            <field name="model">gym.payment</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_example">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="o_kanban_record">
+                                <div class="oe_kanban_content">
+                                    <strong>
+                                        <field name="member_id"/>
+                                    </strong>
+                                    <div>Membership:
+                                        <field name="membership_id"/>
+                                    </div>
+                                    <div>Amount:
+                                        <field name="amount"/>
+                                    </div>
+                                    <div>Date:
+                                        <field name="payment_date"/>
+                                    </div>
+                                    <div>Method:
+                                        <field name="payment_method"/>
+                                    </div>
+                                    <div>Status:
+                                        <field name="status"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="gym_payment_act_window" model="ir.actions.act_window">
+            <field name="name">Gym Payment</field>
+            <field name="res_model">gym.payment</field>
+            <field name="view_mode">tree,kanban,form,graph,pivot</field>
+        </record>
+
+        <menuitem name="Payments" id="gym_payment_menu" parent="menu_gym_root" action="gym_payment_act_window"/>
+    </data>
+</odoo>

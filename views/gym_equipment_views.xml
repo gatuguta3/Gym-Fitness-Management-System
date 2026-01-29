@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_gym_equipment_form" model="ir.ui.view">
+        <field name="name">gym.equipment.form</field>
+        <field name="model">gym.equipment</field>
+        <field name="arch" type="xml">
+            <form string="Gym Equipment">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Enter equipment name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="description" placeholder="Enter equipment description"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="image" widget="image" class="oe_avatar"/>
+                        </group>
+                        <group>
+                            <field name="category"/>
+                            <field name="quantity"/>
+                        </group>
+                    </group>
+                    
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+     <!-- Kanban View -->
+<record id="view_gym_equipment_kanban" model="ir.ui.view">
+    <field name="name">gym.equipment.kanban</field>
+    <field name="model">gym.equipment</field>
+    <field name="arch" type="xml">
+        <kanban default_group_by="category">
+            <field name="name"/>
+            <field name="category"/>
+            <field name="quantity"/>
+            <field name="image"/>
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click">
+                        <div class="o_kanban_image">
+                            <t t-if="record.image.raw_value">
+                                <field name="image" widget="image" class="oe_avatar" width="64" height="64"/>
+                            </t>
+                            <t t-else="">
+                                <img src="/web/static/img/placeholder.png" class="oe_kanban_image" alt="No Image"/>
+                            </t>
+                        </div>
+                        <div class="o_kanban_details">
+                            <div class="o_kanban_details_wrapper">
+                                <strong>
+                                    <field name="name"/>
+                                </strong>
+                                <div>
+                                    <span class="text-muted">
+                                        <field name="category"/>
+                                    </span>
+                                </div>
+                                <div t-if="record.quantity.raw_value" class="o_kanban_text_primary">
+                                    <i class="fa fa-cubes me-1"/> 
+                                    Qty: <field name="quantity"/>
+                                </div>
+                                <div t-else="" class="text-danger">
+                                    <i class="fa fa-exclamation-triangle me-1"/> 
+                                    Out of Stock
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+
+
+    <!-- Tree View -->
+    <record id="view_gym_equipment_tree" model="ir.ui.view">
+        <field name="name">gym.equipment.tree</field>
+        <field name="model">gym.equipment</field>
+        <field name="arch" type="xml">
+            <tree string="Gym Equipment">
+                <field name="image" widget="image" class="oe_avatar" width="64"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="quantity"/>
+            </tree>
+        </field>
+    </record>
+
+   
+
+    <!-- Search View -->
+    <record id="view_gym_equipment_search" model="ir.ui.view">
+        <field name="name">gym.equipment.search</field>
+        <field name="model">gym.equipment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="category"/>
+                <filter string="Low Stock" name="low_stock" domain="[('quantity', '&lt;', 5)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="category" context="{'group_by': 'category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_gym_equipment" model="ir.actions.act_window">
+        <field name="name">Gym Equipment</field>
+        <field name="res_model">gym.equipment</field>
+        <field name="view_mode">kanban,form,tree</field>
+        <field name="view_id" ref="view_gym_equipment_tree"/>
+        <field name="search_view_id" ref="view_gym_equipment_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first equipment item!
+            </p>
+        </field>
+    </record>
+
+
+    <!-- Menuitem -->
+    <menuitem id="menu_gym_equipment"  name="Equipment"  parent="menu_gym_root"  action="action_gym_equipment" />
+</odoo>
