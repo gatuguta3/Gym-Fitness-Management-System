@@ -10,6 +10,7 @@
     'depends': ['base', 'mail', 'calendar', 'sale'],
     'data': [
         
+        'views/gym_menus.xml',  
         'views/gym_member_views.xml',
         'views/gym_activity_views.xml',
         'views/gym_attendance_views.xml',
@@ -21,10 +22,9 @@
         'views/gym_equipment_views.xml',   
         'views/gym_session_views.xml',         
         'data/email_template_data.xml',
+        'data/sequences.xml',  
         'security/gym_security.xml',
-        'security/ir.model.access.csv',
-        'data/sequences.xml',
-        'views/gym_menus.xml'       
+        'security/ir.model.access.csv'                
          
         
     ],

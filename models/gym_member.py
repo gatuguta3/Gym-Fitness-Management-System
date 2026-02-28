@@ -112,36 +112,54 @@ class GymMember(models.Model):
 
     # And a method to check if membership is active
     def check_attendance_status(self):
-        """Check and update membership status"""
-        today = date.today()
-        for member in self:
-            
-            last_check_in_date = member.last_check_in.date()
-            days_since_last_attendance = (today - last_check_in_date).days
-            
-            if days_since_last_attendance >= 30:
-                # Last attendance was 40+ days ago - mark as inactive
-                member.attendance_state = 'inactive'
-             # Skip other checks since we've already set to inactive
-            else:
-                member.attendance_state = 'active'
-
-
-    # Compute membership state with payment validation and expiry date
-    @api.depends('expiry_date')
-    def check_membership_status(self):
-        """Compute membership state with payment validation"""
-        today = date.today()
+        """Check and update membership status based on attendance"""
+        from datetime import date
         
-        for member in self:            
+        for member in self:
+            # Default for new members with no attendance
+            member.attendance_state = 'active'  # Default to active for new members
             
-            days_past_expiry = (today - member.expiry_date).days
-            # Check if expired by date
-            if days_past_expiry > 0 :
-                member.membership_state = 'expired'
-            else:
-                # Default state if dates are not set
-                member.membership_state = 'renewed'
+            # Check if member has any attendance record
+            if member.last_check_in:
+                # Make sure it's a datetime/date object before calling .date()
+                if hasattr(member.last_check_in, 'date'):
+                    last_check_in_date = member.last_check_in.date()
+                    today = date.today()
+                    days_since_last_attendance = (today - last_check_in_date).days
+                    
+                    if days_since_last_attendance >= 30:
+                        # Last attendance was 30+ days ago - mark as inactive
+                        member.attendance_state = 'inactive'
+                    # else: stays 'active' (already set)
+                else:
+                    # If last_check_in is boolean or other type, just check if True
+                    if member.last_check_in:
+                        member.attendance_state = 'active'
+            # else: no last_check_in, keep default 'active' for new members
+
+
+    def check_membership_status(self):
+        """
+        Compute membership status based on expiry date
+        Returns 'renewed' if member has valid membership, 'expired' otherwise
+        """
+        from datetime import date
+        
+        for record in self:
+            # Default to expired
+            status = 'expired'
+            
+            # Check if expiry date exists and is in the future
+            if record.expiry_date:
+                today = date.today()
+                
+                # If expiry date is today or in the future, status is renewed
+                if record.expiry_date >= today:
+                    status = 'renewed'
+            
+            # Set the computed value
+            record.membership_state = status
+    
 
    
 
@@ -303,7 +321,7 @@ class GymMember(models.Model):
 
 
 
-    @api.depends('membership_id.price', 'payment_ids.amount', 'payment_ids.status','payment_ids.payment_date')
+    @api.depends('membership_id.price', 'payment_ids.amount', 'payment_ids.status', 'payment_ids.payment_date')
     def _compute_remaining_amount(self):
         """Compute remaining amount based on membership price and payments"""
         for member in self:
@@ -311,12 +329,16 @@ class GymMember(models.Model):
             if member.membership_id and member.membership_id.price:
                 total_due = member.membership_id.price
                 
-                # Get all confirmed/done payments between last renewal date and expiration date
+                # Check if last_renewal_date is invalid (None or empty) and assign join_date
+                renewal_date = member.last_renewal_date
+                if not renewal_date:  # If last_renewal_date is None/False
+                    renewal_date = member.join_date
                 
+                # Get all confirmed/done payments between last renewal date (or join date) and expiration date
                 valid_payments = member.payment_ids.filtered(
                     lambda p: (
                         p.status in ['paid', 'Paid'] 
-                        and p.payment_date >= member.last_renewal_date 
+                        and p.payment_date >= renewal_date
                         and p.payment_date <= member.expiry_date
                     )
                 )

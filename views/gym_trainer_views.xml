@@ -1,80 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_gym_trainer_form" model="ir.ui.view">
-        <field name="name">gym.trainer.form</field>
-        <field name="model">gym.trainer</field>
-        <field name="arch" type="xml">
-            <form string="Gym Trainer">
-                <sheet>
-                    <div class="oe_title">
-                        <label for="name"/>
-                        <h1>
-                            <field name="name" placeholder="Full Name"/>
-                        </h1>
-                    </div>
-                    <br>
-                    </br>
-                    <group>
-                        <group>
-                            <field name="email"/>
-                            <field name="phone"/>
-                        </group>
-                        <group>
-                            <field name="specialization"/>
-                        </group>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
+    <data>
 
-    <record id="view_gym_trainer_tree" model="ir.ui.view">
-        <field name="name">gym.trainer.tree</field>
-        <field name="model">gym.trainer</field>
-        <field name="arch" type="xml">
-            <tree string="Gym Trainers">
-                <field name="name"/>
-                <field name="email"/>
-                <field name="phone"/>
-                <field name="specialization"/>
-            </tree>
-        </field>
-    </record>
+        <record id="view_gym_trainer_form" model="ir.ui.view">
+            <field name="name">gym.trainer.form</field>
+            <field name="model">gym.trainer</field>
+            <field name="arch" type="xml">
+                <form string="Gym Trainer">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Full Name"/>
+                            </h1>
+                        </div>
+                        <br>
+                        </br>
+                        <group>
+                            <group>
+                                <field name="email"/>
+                                <field name="phone"/>
+                            </group>
+                            <group>
+                                <field name="specialization"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
-    <record id="view_gym_trainer_kanban" model="ir.ui.view">
-        <field name="name">gym.trainer.kanban</field>
-        <field name="model">gym.trainer</field>
-        <field name="arch" type="xml">
-            <kanban>
-                <templates>
-                    <t t-name="kanban-box">
-                        <div class="o_kanban_record">
-                            <div class="oe_kanban_content">
-                                <strong>
-                                    <field name="name"/>
-                                </strong>
-                                <div>Email:
-                                    <field name="email"/>
-                                </div>
-                                <div>Phone:
-                                    <field name="phone"/>
-                                </div>
-                                <div>Specialization:
-                                    <field name="specialization"/>
+        <record id="view_gym_trainer_tree" model="ir.ui.view">
+            <field name="name">gym.trainer.tree</field>
+            <field name="model">gym.trainer</field>
+            <field name="arch" type="xml">
+                <tree string="Gym Trainers">
+                    <field name="name"/>
+                    <field name="email"/>
+                    <field name="phone"/>
+                    <field name="specialization"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_gym_trainer_kanban" model="ir.ui.view">
+            <field name="name">gym.trainer.kanban</field>
+            <field name="model">gym.trainer</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="o_kanban_record">
+                                <div class="oe_kanban_content">
+                                    <strong>
+                                        <field name="name"/>
+                                    </strong>
+                                    <div>Email:
+                                        <field name="email"/>
+                                    </div>
+                                    <div>Phone:
+                                        <field name="phone"/>
+                                    </div>
+                                    <div>Specialization:
+                                        <field name="specialization"/>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </t>
-                </templates>
-            </kanban>
-        </field>
-    </record>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
 
-    <record id="action_gym_trainer" model="ir.actions.act_window">
-        <field name="name">Gym Trainers</field>
-        <field name="res_model">gym.trainer</field>
-        <field name="view_mode">tree,form,kanban</field>
-    </record>
+        <record id="action_gym_trainer" model="ir.actions.act_window">
+            <field name="name">Gym Trainers</field>
+            <field name="res_model">gym.trainer</field>
+            <field name="view_mode">tree,form,kanban</field>
+        </record>
 
-    <menuitem id="menu_gym_trainers" name="Trainers" parent="menu_gym_root" action="action_gym_trainer"/>
+        <menuitem id="menu_gym_trainers" name="Trainers" parent="menu_gym_root" action="action_gym_trainer"/>
+    </data>
 </odoo>
